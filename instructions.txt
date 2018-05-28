@@ -5,7 +5,6 @@ Author: Saulo S. Ortiz
 Date: 20170417
 
 WHAT YOU’LL NEED
---------------------------------------------------------------
   • Raspberry Pi3 or better and power cord
     o Or micro USB cable connected to powered USB port
   • 8GB or better micro SD card and caddy (usually comes with micro card)
@@ -25,7 +24,6 @@ WHAT YOU’LL NEED
     o Case for the Raspberry Pi
 
 INSTRUCTIONS
---------------------------------------------------------------
   • Download Noobs OS
     o (https://www.raspberrypi.org/downloads/noobs/)
   • Download and install Rufus
@@ -36,7 +34,6 @@ INSTRUCTIONS
     o Usually already in computer
 
 SETUP
---------------------------------------------------------------
   • Connect micro SD card to SD card reader
   • Extract Noobs onto Desktop or working folder
   • Run Rufus and select SD card drive letter under Device drop-down menu
@@ -66,7 +63,6 @@ SETUP
   • Login is pi/raspberry
 
 INITIAL UPDATE
---------------------------------------------------------------
   • sudo apt-get update –y && sudo apt-get upgrade -y
 
 DNSMASQ AND HOSTAPD INSTALLATION
