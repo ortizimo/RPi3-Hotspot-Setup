@@ -5,8 +5,8 @@ Author: Saulo S. Ortiz
 Date: 20170417
 
 WHAT YOU’LL NEED
-•	Raspberry Pi3 or better and power cord
-o	Or micro USB cable connected to powered USB port
+  • Raspberry Pi3 or better and power cord
+    o Or micro USB cable connected to powered USB port
 •	8GB or better micro SD card and caddy (usually comes with micro card)
 •	USB Card Reader or adapter
 •	Programs:
