@@ -24,118 +24,119 @@ WHAT YOU’LL NEED
     o Case for the Raspberry Pi
 
 INSTRUCTIONS
-•	Download Noobs OS
-o	(https://www.raspberrypi.org/downloads/noobs/)
-•	Download and install Rufus
-o	(http://rufus.akeo.ie/)
-•	Download and install Putty
-o	(http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
-•	Download and install Winrar or 7zip
-o	Usually already in computer
+  • Download Noobs OS
+    o (https://www.raspberrypi.org/downloads/noobs/)
+  • Download and install Rufus
+    o (http://rufus.akeo.ie/)
+  • Download and install Putty
+    o (http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+  • Download and install Winrar or 7zip
+    o Usually already in computer
 
 --------------------------------------------------------------
 STEP #1: SETUP
 --------------------------------------------------------------
-•	Connect micro SD card to SD card reader
-•	Extract Noobs onto Desktop or working folder
-•	Run Rufus and select SD card drive letter under Device drop-down menu
-•	Select drop-down menu that reads FreeDOS and change to DD Image option
-o	Click on button next to this option and browse for the extracted Noobs OS file
-o	Click the Start button to image the SD card
-•	Once Rufus completes close it and remove SD card from card reader
-•	Access your home router and if you have shorten your IP pool add a new IP address
-•	Connect the monitor, keyboard and cat5 cable to RPi3
-o	Connect the other end of the cat5 to your home router
-•	Find the card port in RPi3 and install SD card
-•	Plug the RPi3 and boot up
-•	Type ifconfig and read the MAC for eth0
-•	Go back to your home router and if you have a MAC Address List add the MAC address for eth0 and give it the latest IP address in your IP address pool
-•	Save your router’s settings and close
-•	Go back to RPi3 and type
-o	sudo raspi-config
-o	go to Interface Options
-o	Select SSH and Enable it
-o	Select Finish and Finish to leave this menu
-•	Run Putty
-•	Under Host Name (or IP Address) type the IP you gave RPi3 in your home router
-o	Under Saved Sessions give it a name and click the Save button
-•	Click the Open button to enter RPi3 via SSH
-•	Login is pi/raspberry
+  • Connect micro SD card to SD card reader
+  • Extract Noobs onto Desktop or working folder
+  • Run Rufus and select SD card drive letter under Device drop-down menu
+  • Select drop-down menu that reads FreeDOS and change to DD Image option
+    o Click on button next to this option and browse for the extracted Noobs OS file
+    o Click the Start button to image the SD card
+  • Once Rufus completes close it and remove SD card from card reader
+  • Access your home router and if you have shorten your IP pool add a new IP address
+  • Connect the monitor, keyboard and cat5 cable to RPi3
+    o Connect the other end of the cat5 to your home router
+  • Find the card port in RPi3 and install SD card
+  • Plug the RPi3 and boot up
+  • Type ifconfig and read the MAC for eth0
+  • Go back to your home router and if you have a MAC Address List add the MAC address for eth0 and give it the latest IP address in your IP address pool
+  • Save your router’s settings and close
+  • Go back to RPi3 and type
+    o sudo raspi-config
+    o go to Interface Options
+    o Select SSH and Enable it
+    o Select Finish and Finish to leave this menu
+  • Run Putty
+  • Under Host Name (or IP Address) type the IP you gave RPi3 in your home router
+    o Under Saved Sessions give it a name and click the Save button
+  • Click the Open button to enter RPi3 via SSH
+  • Login is pi/raspberry
+
 --------------------------------------------------------------
 INITIAL UPDATE
 --------------------------------------------------------------
-•	sudo apt-get update –y && sudo apt-get upgrade -y
+  • sudo apt-get update –y && sudo apt-get upgrade -y
 
 DNSMASQ AND HOSTAPD INSTALLATION
-•	sudo apt-get install dnsmasq hostapd –y
+  • sudo apt-get install dnsmasq hostapd –y
 
 EDIT DHCPCD
-•	sudo nano /etc/dhcpcd.conf
-o	create a new line at bottom
-o	enter denyinterfaces wlan0
-•	ctrl-x, y, enter
+  • sudo nano /etc/dhcpcd.conf
+    o create a new line at bottom
+    o enter denyinterfaces wlan0
+  • ctrl-x, y, enter
 
 CONFIGURE STATIC IP
-•	sudo nano /etc/network/interfaces
-•	change and add:
-o	iface wlan0 inet static
-o	 address 172.24.1.1
-o	 netmask 255.255.255.0
-o	 network 172.24.1.0
-o	 broadcast 172.24.1.255
-o	# wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-•	ctrl-x, y, enter
+  • sudo nano /etc/network/interfaces
+  • change and add:
+    o iface wlan0 inet static
+    o address 172.24.1.1
+    o netmask 255.255.255.0
+    o network 172.24.1.0
+    o broadcast 172.24.1.255
+    o # wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+  • ctrl-x, y, enter
 
 RESTART SERVICE
-•	sudo service dhcpcd restart
+  • sudo service dhcpcd restart
 
 CONFIGURE HOSTAPD
-•	sudo nano /etc/hostapd/hostapd.conf
-o	# Name of the Wi-Fi interface we configured above
-o	interface=wlan0
-o
-o	# Use the nl80211 driver with the brcmfmac driver
-o	driver=nl80211
-o
-o	# Name of the network
-o	ssid=Pi3-AP
-o
-o	# Use the 2.4GHz band
-o	hw_mode=g
-o
-o	# Use channel 6 (or any other channel)
-o	channel=6
-o
-o	# Enable 802.11n
-o	ieee80211n=1
-o
-o	# Enable WMM
-o	wmm_enabled=1
-o
-o	# Enable 40MHz channels with 20ns guard interval
-o	ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
-o
-o	# Accept all MAC addresses
-o	macaddr_acl=0
-o
-o	# Use WPA authentication
-o	auth_algs=1
-o
-o	# Require clients to know the network name
-o	ignore_broadcast_ssid=0
-o
-o	# Use WPA2
-o	wpa=2
-o
-o	# Use a pre-shared key
-o	wpa_key_mgmt=WPA-PSK
-o
-o	# Network passphrase
-o	wpa_passphrase=raspberry
-o
-o	# Use AES, instead of TKIP
-o	rsn_pairwise=CCMP
-•	ctrl-x, y, enter
+  • sudo nano /etc/hostapd/hostapd.conf
+    o # Name of the Wi-Fi interface we configured above
+    o interface=wlan0
+    o
+    o # Use the nl80211 driver with the brcmfmac driver
+    o driver=nl80211
+    o
+    o # Name of the network
+    o ssid=Pi3-AP
+    o
+    o # Use the 2.4GHz band
+    o hw_mode=g
+    o
+    o # Use channel 6 (or any other channel)
+    o channel=6
+    o
+    o # Enable 802.11n
+    o ieee80211n=1
+    o
+    o # Enable WMM
+    o wmm_enabled=1
+    o
+    o # Enable 40MHz channels with 20ns guard interval
+    o ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
+    o
+    o # Accept all MAC addresses
+    o macaddr_acl=0
+    o
+    o # Use WPA authentication
+    o auth_algs=1
+    o
+    o # Require clients to know the network name
+    o ignore_broadcast_ssid=0
+    o
+    o # Use WPA2
+    o wpa=2
+    o
+    o # Use a pre-shared key
+    o wpa_key_mgmt=WPA-PSK
+    o
+    o # Network passphrase
+    o wpa_passphrase=raspberry
+    o
+    o # Use AES, instead of TKIP
+    o rsn_pairwise=CCMP
+  • ctrl-x, y, enter
 
 CHECK CONNECTIVITY
 •	sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf
