@@ -1,0 +1,222 @@
+********************************************************
+Raspberry Pi3 Hotspot Setup
+********************************************************
+Author: Saulo S. Ortiz
+Date: 20170417
+
+WHAT YOU’LL NEED
+•	Raspberry Pi3 or better and power cord
+o	Or micro USB cable connected to powered USB port
+•	8GB or better micro SD card and caddy (usually comes with micro card)
+•	USB Card Reader or adapter
+•	Programs:
+o	Noobs operating system
+o	Rufus program
+o	Putty
+o	Winrar or 7zip
+•	Mac or PC (for initial setup)
+o	Internet connectivity
+o	Access to your home router to add new MAC address
+•	Ethernet Cable (cat5)
+•	Optional
+o	Mouse
+o	Monitor with HDMI input
+o	Case for the Raspberry Pi
+*INSTRUCTIONS
+•	Download Noobs OS
+o	(https://www.raspberrypi.org/downloads/noobs/)
+•	Download and install Rufus
+o	(http://rufus.akeo.ie/)
+•	Download and install Putty
+o	(http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+•	Download and install Winrar or 7zip
+o	Usually already in computer
+
+--------------------------------------------------------------
+STEP #1: SETUP
+--------------------------------------------------------------
+•	Connect micro SD card to SD card reader
+•	Extract Noobs onto Desktop or working folder
+•	Run Rufus and select SD card drive letter under Device drop-down menu
+•	Select drop-down menu that reads FreeDOS and change to DD Image option
+o	Click on button next to this option and browse for the extracted Noobs OS file
+o	Click the Start button to image the SD card
+•	Once Rufus completes close it and remove SD card from card reader
+•	Access your home router and if you have shorten your IP pool add a new IP address
+•	Connect the monitor, keyboard and cat5 cable to RPi3
+o	Connect the other end of the cat5 to your home router
+•	Find the card port in RPi3 and install SD card
+•	Plug the RPi3 and boot up
+•	Type ifconfig and read the MAC for eth0
+•	Go back to your home router and if you have a MAC Address List add the MAC address for eth0 and give it the latest IP address in your IP address pool
+•	Save your router’s settings and close
+•	Go back to RPi3 and type
+o	sudo raspi-config
+o	go to Interface Options
+o	Select SSH and Enable it
+o	Select Finish and Finish to leave this menu
+•	Run Putty
+•	Under Host Name (or IP Address) type the IP you gave RPi3 in your home router
+o	Under Saved Sessions give it a name and click the Save button
+•	Click the Open button to enter RPi3 via SSH
+•	Login is pi/raspberry
+--------------------------------------------------------------
+INITIAL UPDATE
+--------------------------------------------------------------
+•	sudo apt-get update –y && sudo apt-get upgrade -y
+
+DNSMASQ AND HOSTAPD INSTALLATION
+•	sudo apt-get install dnsmasq hostapd –y
+
+EDIT DHCPCD
+•	sudo nano /etc/dhcpcd.conf
+o	create a new line at bottom
+o	enter denyinterfaces wlan0
+•	ctrl-x, y, enter
+
+CONFIGURE STATIC IP
+•	sudo nano /etc/network/interfaces
+•	change and add:
+o	iface wlan0 inet static
+o	 address 172.24.1.1
+o	 netmask 255.255.255.0
+o	 network 172.24.1.0
+o	 broadcast 172.24.1.255
+o	# wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+•	ctrl-x, y, enter
+
+RESTART SERVICE
+•	sudo service dhcpcd restart
+
+CONFIGURE HOSTAPD
+•	sudo nano /etc/hostapd/hostapd.conf
+o	# Name of the Wi-Fi interface we configured above
+o	interface=wlan0
+o
+o	# Use the nl80211 driver with the brcmfmac driver
+o	driver=nl80211
+o
+o	# Name of the network
+o	ssid=Pi3-AP
+o
+o	# Use the 2.4GHz band
+o	hw_mode=g
+o
+o	# Use channel 6 (or any other channel)
+o	channel=6
+o
+o	# Enable 802.11n
+o	ieee80211n=1
+o
+o	# Enable WMM
+o	wmm_enabled=1
+o
+o	# Enable 40MHz channels with 20ns guard interval
+o	ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
+o
+o	# Accept all MAC addresses
+o	macaddr_acl=0
+o
+o	# Use WPA authentication
+o	auth_algs=1
+o
+o	# Require clients to know the network name
+o	ignore_broadcast_ssid=0
+o
+o	# Use WPA2
+o	wpa=2
+o
+o	# Use a pre-shared key
+o	wpa_key_mgmt=WPA-PSK
+o
+o	# Network passphrase
+o	wpa_passphrase=raspberry
+o
+o	# Use AES, instead of TKIP
+o	rsn_pairwise=CCMP
+•	ctrl-x, y, enter
+
+CHECK CONNECTIVITY
+•	sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf
+o	check signal with phone
+•	ctrl-c
+
+SET FILE AT BOOTUP
+•	sudo nano /etc/default/hostapd
+o	using ctrl-w find line # DAEMON_CONF=””
+o	enter DAEMON_CONF="/etc/hostapd/hostapd.conf"
+o	remove “#”
+•	ctrl-x, y, enter
+
+CONFIGURE DNSMASQ
+•	sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+•	sudo nano /etc/dnsmasq.conf
+o
+o	# Use interface wlan0
+o	interface=wlan0
+o
+o	# Explicitly specify the address to listen for
+o	listen-address=172.24.1.1
+o
+o	# Bind to the interface
+o	bind-interfaces
+o
+o	# Forward DNS requests to Google DNS
+o	server=8.8.8.8
+o
+o	# Don't forward short names
+o	domain-needed
+o
+o	# Never forward addresses in non-routed address spaces
+o	bogus-priv
+o
+o	# Assign IPs between .50 and .150 with 12hr lease
+o	dhcp-range=172.24.1.50,172.24.1.150,12h
+•	ctrl-x, y, enter
+
+ENABLE IPV4 FORWARDING
+•	sudo nano /etc/sysctl.conf
+o	using ctrl-w find line net.ipv4.ip_forward=1
+o	remove “#”
+•	ctrl-x, y, enter
+
+CONFIGURE NAT BETWEEN wlan0 AND eth0
+•	sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+•	sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+•	sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
+
+SAVE NAT CONFIGURATION RULES TO A FILE
+•	sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+
+RUN NAT RULES AT BOOTUP
+•	sudo nano /etc/rc.local
+o	under #!bin/sh -e make a new line
+o	enter iptables-restore < /etc/iptables.ipv4.nat
+•	ctrl-x, y, enter
+
+RUN HOSTAPD AND DNSMASQ SERVICES
+•	sudo service hostapd start
+•	sudo service dnsmasq start
+•	sudo reboot now
+
+* CONNECT TO OPEN WIFI
+•	sudo nano /etc/network/interfaces
+•	find allow-hotplug wlan1
+•	below change manual to dhcp
+•	sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+•	enter
+o	network={
+o	ssid="Starbucks2GHz"
+o	psk=NONE
+o	key_mgmt=NONE
+o	}
+•	ctrl+x, y, enter
+•	sudo nano /etc/network/interfaces
+o	find iface eth0 inet manual
+o	change manual to dhcp
+•	sudo ifconfig wlan1 down
+•	sudo iwconfig wlan1 essid “NETWORK_ID” key “PASSWORD_ID”
+•	sudo ifconfig wlan1 up
+o	wait 5 seconds for changes to replicate and to pull IP
+
+You should be able to connect to the internet via your Pi and your wi-fi and Ethernet should be bind together.
