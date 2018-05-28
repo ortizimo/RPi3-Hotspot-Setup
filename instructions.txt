@@ -41,8 +41,7 @@ SETUP
   • Extract Noobs onto Desktop or working folder
   • Run Rufus and select SD card drive letter under Device drop-down menu
   • Select drop-down menu that reads FreeDOS and change to DD Image option
-    o Click on button next to this option and browse for the extracted Noobs OS
-    file
+    o Click on button next to this option and browse for the extracted Noobs OS file
     o Click the Start button to image the SD card
   • Once Rufus completes close it and remove SD card from card reader
   • Access your home router and if you have shorten your IP pool add a new IP
@@ -52,8 +51,7 @@ SETUP
   • Find the card port in RPi3 and install SD card
   • Plug the RPi3 and boot up
   • Type ifconfig and read the MAC for eth0
-  • Go back to your home router and if you have a MAC Address List add the MAC
-    address
+  • Go back to your home router and if you have a MAC Address List add the MAC address
     for eth0 and give it the latest IP address in your IP address pool
   • Save your router’s settings and close
   • Go back to RPi3 and type
@@ -188,8 +186,7 @@ ENABLE IPV4 FORWARDING
 
 CONFIGURE NAT BETWEEN wlan0 AND eth0
   • sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-  • sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,
-    ESTABLISHED -j ACCEPT
+  • sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED, ESTABLISHED -j ACCEPT
   • sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
 
 SAVE NAT CONFIGURATION RULES TO A FILE
@@ -226,5 +223,4 @@ CONNECT TO OPEN WIFI
   • sudo ifconfig wlan1 up
     o wait 5 seconds for changes to replicate and to pull IP
 
-You should be able to connect to the internet via your Pi and your wi-fi and
-Ethernet should be bind together.
+You should be able to connect to the internet via your Pi and your wi-fi and Ethernet should be bind together.
