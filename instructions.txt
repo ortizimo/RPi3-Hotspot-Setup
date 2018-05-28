@@ -7,22 +7,23 @@ Date: 20170417
 WHAT YOU’LL NEED
   • Raspberry Pi3 or better and power cord
     o Or micro USB cable connected to powered USB port
-•	8GB or better micro SD card and caddy (usually comes with micro card)
-•	USB Card Reader or adapter
-•	Programs:
-o	Noobs operating system
-o	Rufus program
-o	Putty
-o	Winrar or 7zip
-•	Mac or PC (for initial setup)
-o	Internet connectivity
-o	Access to your home router to add new MAC address
-•	Ethernet Cable (cat5)
-•	Optional
-o	Mouse
-o	Monitor with HDMI input
-o	Case for the Raspberry Pi
-*INSTRUCTIONS
+  • 8GB or better micro SD card and caddy (usually comes with micro card)
+  • USB Card Reader or adapter
+  • Programs:
+    o Noobs operating system
+    o Rufus program
+    o Putty
+    o Winrar or 7zip
+  • Mac or PC (for initial setup)
+    o Internet connectivity
+    o Access to your home router to add new MAC address
+  • Ethernet Cable (cat5)
+  • Optional
+    o Mouse
+    o Monitor with HDMI input
+    o Case for the Raspberry Pi
+
+INSTRUCTIONS
 •	Download Noobs OS
 o	(https://www.raspberrypi.org/downloads/noobs/)
 •	Download and install Rufus
