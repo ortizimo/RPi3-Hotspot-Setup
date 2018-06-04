@@ -1,8 +1,9 @@
-********************************************************
+﻿********************************************************
+Straightforward Training™
 Raspberry Pi3 Hotspot Setup
-********************************************************
 Author: Saulo S. Ortiz
 Date: 20170417
+********************************************************
 
 WHAT YOU’LL NEED
   • Raspberry Pi3 or better and power cord
@@ -220,3 +221,11 @@ CONNECT TO OPEN WIFI
     o wait 5 seconds for changes to replicate and to pull IP
 
 You should be able to connect to the internet via your Pi and your wi-fi and Ethernet should be bind together.
+an1 essid “NETWORK_ID” key “PASSWORD_ID”
+  • sudo ifconfig wlan1 up
+    o wait 5 seconds for changes to replicate and to pull IP
+
+You should be able to connect to the internet via your Pi and your wi-fi and Ethernet should be bind together.
+
+er.
+ogether.
